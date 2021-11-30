@@ -11,7 +11,7 @@ session_start();
 </head>
 <body>
 <?php
-if(isset($_COOKIE['user'])){
+if(isset($_COOKIE['user']) && $_COOKIE['user'] === $_SESSION['user']){
     echo '<div  class="welcome"><h1>Hello, '.$_SESSION['user'].'</h1>
 <button id="logout">Exit</button></div>';
 }else{

@@ -66,15 +66,22 @@ $('#signup').validate({
                     headers: headers
                 }).then((response) => {
                     response.json().then((result) => {
-                        if(result == 'login'){
-                            $('#taken_email').prop('hidden', true);
-                            $('#taken_login').prop('hidden', false);
-                        }else if(result == 'email'){
-                            $('#taken_login').prop('hidden', true);
-                            $('#taken_email').prop('hidden', false);
-                        }else{
-                            document.cookie = "user="+result;
+
+                        if(result.hasError !== true){
+                            document.cookie = "user="+result.login;
                             location.reload();
+                        }else {
+                            switch (result.reason){
+                                case 'user.login.already.exist':
+                                    $('#taken_email').prop('hidden', true);
+                                    $('#taken_login').prop('hidden', false);
+                                    break
+
+                                case 'user.email.already.exist':
+                                    $('#taken_login').prop('hidden', true);
+                                    $('#taken_email').prop('hidden', false);
+                                    break
+                            }
                         }
                     });
                 });

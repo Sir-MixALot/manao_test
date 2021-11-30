@@ -31,15 +31,21 @@ $('#login').validate({
             body: JSON.stringify(body)
         }).then((response) => {
             response.json().then((result) => {
-                if(result == 'login'){
-                    $('#wrong_login').prop('hidden', false);
-                    $('#wrong_pass').prop('hidden', true);
-                }else if(result == 'password'){
-                    $('#wrong_login').prop('hidden', true);
-                    $('#wrong_pass').prop('hidden', false);
-                }else{
-                    document.cookie = "user="+result;
+                if(result.hasError !== true){
+                    document.cookie = "user="+result.login;
                     location.reload();
+                }else {
+                    switch (result.reason){
+                        case 'user.login.notfound':
+                            $('#wrong_pass').prop('hidden', true);
+                            $('#wrong_login').prop('hidden', false);
+                            break
+
+                        case 'user.password.wrong':
+                            $('#wrong_pass').prop('hidden', false);
+                            $('#wrong_login').prop('hidden', true);
+                            break
+                    }
                 }
             });
         });
