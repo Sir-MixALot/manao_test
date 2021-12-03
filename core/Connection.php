@@ -55,7 +55,7 @@ class Connection
         if($user && $user['email'] === $arr['email']){
             throw new \UserInterrException('user.email.already.exist');
         }
-
+        $arr['password'] = sha1($this->salt . $arr['password']);
         $this->userManagenmet->createUser($arr);
 
         $_SESSION ['user'] = $arr['usr_login'];
